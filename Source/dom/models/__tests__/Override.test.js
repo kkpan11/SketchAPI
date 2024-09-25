@@ -32,7 +32,7 @@ test('should be able to set overrides', (_context, document) => {
   const instance = master.createNewInstance()
   document.selectedPage.layers = document.selectedPage.layers.concat(instance)
 
-  expect(instance.overrides.length).toBe(6)
+  expect(instance.overrides.length).toBe(7)
   const override = instance.overrides[0]
   expect(override.isDefault).toBe(true)
   // check that an override can be logged
@@ -41,7 +41,7 @@ test('should be able to set overrides', (_context, document) => {
   // override
   override.value = 'overridden'
 
-  expect(instance.overrides.length).toBe(6)
+  expect(instance.overrides.length).toBe(7)
   const result = {
     type: 'Override',
     id: `${text.id}_stringValue`,
@@ -79,9 +79,9 @@ test('should change a nested symbol', (_context, document) => {
 
   // add the instance to the page
   document.selectedPage.layers = document.selectedPage.layers.concat(instance)
-  expect(instance.overrides.length).toBe(14)
+  expect(instance.overrides.length).toBe(17)
 
-  const override = instance.overrides[7]
+  const override = instance.overrides[9]
   override.value = nestedMaster2.symbolId
 
   const result = {
@@ -98,8 +98,8 @@ test('should change a nested symbol', (_context, document) => {
   }
   delete result.affectedLayer.overrides
   delete result.affectedLayer.selected
-  result.affectedLayer.style = instance.overrides[7].affectedLayer.style.toJSON()
-  expect(instance.overrides[7].toJSON()).toEqual(result)
+  result.affectedLayer.style = instance.overrides[9].affectedLayer.style.toJSON()
+  expect(instance.overrides[9].toJSON()).toEqual(result)
 })
 
 test('should handle image override', (_context, document) => {
@@ -121,8 +121,8 @@ test('should handle image override', (_context, document) => {
 
   // add the instance to the page
   document.selectedPage.layers = document.selectedPage.layers.concat(instance)
-  expect(instance.overrides.length).toBe(2)
-  
+  expect(instance.overrides.length).toBe(3)
+
   // check image resize behavior
   expect(instance.overrides[0].property).toBe('imageResizeBehavior')
   expect(instance.overrides[0].isDefault).toBe(true)
@@ -148,15 +148,14 @@ test('should handle image override', (_context, document) => {
   expect(instance.overrides[1].value.type).toBe('ImageData')
 })
 
-test('hidden layers should not be editable', (_context, document) => {
+test('hidden layers still editable', (_context, document) => {
   const { master } = createSymbolMaster(document)
   master.layers[0].hidden = true
   const instance = master.createNewInstance()
   document.selectedPage.layers = document.selectedPage.layers.concat(instance)
 
-  // We used to test that hidden layers weren't marked as editable, but now hidden
-  // layers don't surface overrides at all. #47514
-  expect(instance.overrides.length).toBe(0)
+  // Update for 51800 - overrides should be available in hidden layers
+  expect(instance.overrides.length).toBe(7)
 })
 
 test('should be able to select an override', (_context, document) => {
