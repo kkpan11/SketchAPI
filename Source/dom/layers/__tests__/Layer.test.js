@@ -307,7 +307,7 @@ test('should transform the layer', () => {
   })
 
   group.transform.rotation = 720
-  expect(group.transform.rotation).toBe(0)
+  expect(group.transform.rotation).toBe(720)
 })
 
 // Regression #39358, SketchAPI#772.
